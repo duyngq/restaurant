@@ -27,7 +27,7 @@ import ampos.miniproject.restaurant.dto.MenuDTO;
 import ampos.miniproject.restaurant.model.Menu;
 import ampos.miniproject.restaurant.models.MenuRequest;
 import ampos.miniproject.restaurant.repository.MenuRepository;
-import ampos.miniproject.restaurant.rest.MenuResource;
+import ampos.miniproject.restaurant.resource.MenuResource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MenuResourcesTestCase extends BaseTestCase {

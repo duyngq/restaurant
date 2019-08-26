@@ -1,4 +1,4 @@
-package ampos.miniproject.restaurant.rest;
+package ampos.miniproject.restaurant.resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

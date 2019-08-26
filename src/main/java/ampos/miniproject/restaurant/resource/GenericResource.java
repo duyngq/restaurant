@@ -1,4 +1,4 @@
-package ampos.miniproject.restaurant.rest;
+package ampos.miniproject.restaurant.resource;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ampos.miniproject.restaurant.dto.MenuDTO;
 import ampos.miniproject.restaurant.exception.ApplicationException;
-import ampos.miniproject.restaurant.rest.util.ResponseUtil;
+import ampos.miniproject.restaurant.resource.util.ResponseUtil;
 import ampos.miniproject.restaurant.service.GenericService;
 import ampos.miniproject.restaurant.service.MenuService;
 

@@ -34,6 +34,7 @@ import ampos.miniproject.restaurant.models.BillResponse;
 import ampos.miniproject.restaurant.models.MenuRequest;
 import ampos.miniproject.restaurant.repository.BillItemRepository;
 import ampos.miniproject.restaurant.repository.BillRepository;
+import ampos.miniproject.restaurant.resource.BillResource;
 import ampos.miniproject.restaurant.util.RestaurantConstants;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

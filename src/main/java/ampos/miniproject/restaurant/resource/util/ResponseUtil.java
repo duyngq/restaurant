@@ -1,4 +1,4 @@
-package ampos.miniproject.restaurant.rest.util;
+package ampos.miniproject.restaurant.resource.util;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package ampos.miniproject.restaurant.rest;
+package ampos.miniproject.restaurant.resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

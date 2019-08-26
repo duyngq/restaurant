@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Properties>
+		<Property name="log-path">logs</Property>
+		<Property name="archive">${log-path}/archive</Property>
+	</Properties>
+	<Appenders>
+		<!--  system log -->
+		<RollingFile name="serverlog" fileName="${log-path}/serverlog.log"
+					 filePattern="${archive}/serverlog_%d{dd-MM-yyyy}.log">
+			<PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%L - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="12" />
+		</RollingFile>
+
+		<!-- application log -->
+		<RollingFile name="ampos" fileName="${log-path}/ampos.log"
+					 filePattern="${archive}/ampos_%d{dd-MM-yyyy}.log">
+			<PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%L - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="12" />
+		</RollingFile>
+
+	</Appenders>
+
+	<Loggers>
+		<Logger name="ampos.restaurant" level="debug" additivity="false">
+			<AppenderRef ref="ampos" />
+		</Logger>
+
+		<Root level="info">
+			<AppenderRef ref="serverlog" />
+		</Root>
+
+	</Loggers>
+</Configuration>
+

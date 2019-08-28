@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-	<Properties>
-		<Property name="log-path">logs</Property>
-	</Properties>
 	<Appenders>
-		<RollingFile name="ampos" fileName="${log-path}/ampos.log"
-					 filePattern="${log-path}/ampos_%d{dd-MM-yyyy}.log">
+		<RollingFile name="ampos" fileName="logs/ampos.log"
+					 filePattern="logs/ampos_%d{dd-MM-yyyy}.log">
 			<PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%L - %msg%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -17,7 +14,7 @@
 	</Appenders>
 
 	<Loggers>
-		<Logger name="ampos.miniproject.restaurant" level="debug" additivity="false">
+		<Logger name="ampos.miniproject.retaurant" level="debug" additivity="false">
 			<AppenderRef ref="ampos" />
 		</Logger>
 

@@ -31,17 +31,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table( name = Bill.TABLE_NAME )
+@Table(name = Bill.TABLE_NAME)
 public class Bill implements DomainEntity<Long>, Serializable {
     private static final long serialVersionUID = 1L;
     protected static final String TABLE_NAME = "bill";
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
-    @Column( name = "id" )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @OneToMany( mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER )
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<BillItem> billItems = new HashSet<>();
 
     /**
@@ -49,6 +49,6 @@ public class Bill implements DomainEntity<Long>, Serializable {
      *
      */
     public BigDecimal getTotal() {
-        return billItems.stream().map( BillItem::getSubTotal ).reduce( BigDecimal.ZERO, BigDecimal::add );
+        return billItems.stream().map(BillItem::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

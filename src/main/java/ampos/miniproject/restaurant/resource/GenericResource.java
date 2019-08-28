@@ -2,12 +2,9 @@ package ampos.miniproject.restaurant.resource;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
-import io.swagger.annotations.ApiOperation;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,15 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import ampos.miniproject.restaurant.dto.MenuDTO;
 import ampos.miniproject.restaurant.exception.ApplicationException;
-import ampos.miniproject.restaurant.resource.util.ResponseUtil;
 import ampos.miniproject.restaurant.service.GenericService;
-import ampos.miniproject.restaurant.service.MenuService;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Generic controller to handle requests with CRUD operation
@@ -34,7 +26,7 @@ import ampos.miniproject.restaurant.service.MenuService;
  */
 
 public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends GenericService<REQUEST, RESPONSE, ID>> {
-
+    private static final Logger LOGGER = LogManager.getLogger(GenericResource.class);
     protected SERVICE service;
 
     public GenericResource(SERVICE service) {
@@ -46,8 +38,8 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     /**
      * POST /{mapping}: Create new resource
      *
-     * @param request: contain data about the resource to be created
-     * @return the ResponseEntity with status 200 (OK)
+     * @param request
+     * @return
      * @throws ApplicationException
      * @throws URISyntaxException
      */
@@ -55,6 +47,7 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     @PostMapping
     public ResponseEntity<RESPONSE> create(@RequestBody REQUEST request)
             throws ApplicationException, URISyntaxException {
+        LOGGER.info("Adding a new resource");
         RESPONSE response = this.service.save(null, request);
         return ResponseEntity.created(new URI(getMapping() + "/")).body(response);
     }
@@ -62,14 +55,16 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     /**
      * PUT /{mapping} : Updates an existing resource.
      *
-     * @param id: if of the resource to update
-     * @param request: resource to update
-     * @return the ResponseEntity with status code and body the updated resource
+     * @param id
+     * @param request
+     * @return
+     * @throws ApplicationException
      */
     @ApiOperation(value = "Update an existing resource", response = ResponseEntity.class)
     @PutMapping("/{id}")
     public ResponseEntity<RESPONSE> update(@PathVariable ID id, @RequestBody REQUEST request)
             throws ApplicationException {
+        LOGGER.info("Updating an existing resource");
         RESPONSE response = this.service.save(id, request);
         return ResponseEntity.ok().body(response);
     }
@@ -77,13 +72,14 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     /**
      * GET /{mapping}/:id : Get the "id" resource.
      *
-     * @param id: the id of the resource to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the resource,
-     *         or with status 404 (Not Found)
+     * @param id
+     * @return
+     * @throws ApplicationException
      */
     @ApiOperation(value = "Get resource by id", response = ResponseEntity.class)
     @GetMapping("/{id}")
     public ResponseEntity<RESPONSE> findById(@PathVariable ID id) throws ApplicationException {
+        LOGGER.info("Getting a resource by ID");
         RESPONSE response = this.service.findById(id);
         return ResponseEntity.ok().body(response);
     }
@@ -91,8 +87,9 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     /**
      * GET /{mapping} : Get all the resources.
      *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status code and the list of resources in body
+     * @param pageable
+     * @return
+     * @throws ApplicationException
      */
     @ApiOperation(value = "Get all resources with paging", response = ResponseEntity.class)
     @GetMapping
@@ -104,8 +101,9 @@ public abstract class GenericResource<REQUEST, RESPONSE, ID, SERVICE extends Gen
     /**
      * DELETE /{mapping}/:id : Delete the "id" item.
      *
-     * @param id: the id of the item to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @param id
+     * @return
+     * @throws ApplicationException
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable ID id) throws ApplicationException {

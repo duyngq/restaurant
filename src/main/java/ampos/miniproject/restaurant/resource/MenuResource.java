@@ -20,12 +20,12 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-@RequestMapping( MenuResource.MENUS_MAPPING )
+@RequestMapping(MenuResource.MENUS_MAPPING)
 public class MenuResource extends GenericResource<MenuRequestDTO, MenuDTO, Long, MenuService> {
 
     public static final String MENUS_MAPPING = "/menus";
 
-    public MenuResource( MenuService menuService ) {
+    public MenuResource(MenuService menuService) {
         super(menuService);
     }
 
@@ -37,16 +37,16 @@ public class MenuResource extends GenericResource<MenuRequestDTO, MenuDTO, Long,
     /**
      * GET /{mapping}/search?keyword=<keyword> : Search menus by keyword.
      *
-     * @param keyword:
-     *            the keyword to search
-     * @param pageable:
-     *            the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of menus in body
+     * @param keyword
+     * @param pageable
+     * @return
+     * @throws ApplicationException
      */
-    @ApiOperation( value = "Search menus by title or description or additional details", response = ResponseEntity.class )
-    @GetMapping( "/search" )
-    public ResponseEntity<Page<MenuDTO>> search( @RequestParam( value = "keyword" ) String keyword, Pageable pageable ) throws ApplicationException {
-        Page<MenuDTO> page = this.service.search( keyword, pageable );
-        return new ResponseEntity<>( page, null, HttpStatus.OK );
+    @ApiOperation(value = "Search menus by title or description or additional details", response = ResponseEntity.class)
+    @GetMapping("/search")
+    public ResponseEntity<Page<MenuDTO>> search(@RequestParam(value = "keyword") String keyword, Pageable pageable)
+            throws ApplicationException {
+        Page<MenuDTO> page = this.service.search(keyword, pageable);
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
     }
 }

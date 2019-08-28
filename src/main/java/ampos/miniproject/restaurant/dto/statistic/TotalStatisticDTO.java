@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Total statistic for bill and menu
+ */
 @Getter
 @Setter
 @NoArgsConstructor

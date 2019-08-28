@@ -9,13 +9,14 @@ import ampos.miniproject.restaurant.model.BillItemStatistic;
 /**
  * Bill item statistic mapper
  */
-@Mapper( componentModel = "spring", uses = { MenuMapper.class })
-public interface BillItemStatisticMapper extends GenericMapper<BillItemStatisticDTO, BillItemStatistic, BillItemRequestDTO> {
+@Mapper(componentModel = "spring", uses = { MenuMapper.class })
+public interface BillItemStatisticMapper
+        extends GenericMapper<BillItemStatisticDTO, BillItemStatistic, BillItemRequestDTO> {
 
     /**
      *
      * @param billItemReport
-     * @return billItemReportDTO which is DTO of billItemReport
+     * @return billItemReportDTO
      */
-    BillItemStatisticDTO entityToDto( BillItemStatistic billItemReport );
+    BillItemStatisticDTO entityToDto(BillItemStatistic billItemReport);
 }

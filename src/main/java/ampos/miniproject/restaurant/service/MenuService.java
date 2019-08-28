@@ -15,13 +15,11 @@ public interface MenuService extends GenericService<MenuRequestDTO, MenuDTO, Lon
     /**
      * Search menu by keyword
      *
-     * @param keyword
-     *            : the keyword of menu title or description or additional
-     *            details.
+     * @param keyword  : the keyword of menu title or description or additional
+     *                 details.
      * @param pageable
-     *            : the pagination information
      * @return
      * @throws ApplicationException
      */
-    Page<MenuDTO> search( String keyword, Pageable pageable ) throws ApplicationException;
+    Page<MenuDTO> search(String keyword, Pageable pageable) throws ApplicationException;
 }

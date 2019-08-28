@@ -14,58 +14,63 @@ import ampos.miniproject.restaurant.model.Menu;
 /**
  * Mapper for the entity MenuItem and its DTO MenuItemDTO.
  */
-@Mapper( componentModel = "spring" )
+@Mapper(componentModel = "spring")
 public interface MenuMapper extends GenericMapper<MenuDTO, Menu, MenuRequestDTO> {
 
     /**
      *
      * @param menuItem
-     * @return menuItemDTO which is DTO of menuItem
+     * @return menuItemDTO
      */
-    @Mapping( source = "menu.details", target = "details", qualifiedByName = "toDtoDetails" )
-    MenuDTO entityToDto( Menu menu);
+    @Mapping(source = "menu.details", target = "details", qualifiedByName = "toDtoDetails")
+    MenuDTO entityToDto(Menu menu);
 
     /**
      *
      * @param menuItemRequestDTO
-     * @return menuItem which is entity of menuItemDTO
+     * @return menuItem
      */
-    @Mapping( source = "menuRequestDTO.details", target = "details", qualifiedByName = "toEntityDetails" )
-    Menu requestToEntity( MenuRequestDTO menuRequestDTO );
+    @Mapping(source = "menuRequestDTO.details", target = "details", qualifiedByName = "toEntityDetails")
+    Menu requestToEntity(MenuRequestDTO menuRequestDTO);
 
     /**
-     * Helper method to map "details" field from entity (which is of type String) to "details" field of dto (which is of type List<String>)
+     * Map "details" field from entity to "details" field of dto (String with
+     * delimiter to List<String>)
+     *
      * @param details comma separated string of details
      * @return return list of details
      */
-    @Named( "toDtoDetails" )
-    default List<String> toDtoDetails( String details ) {
-        return Arrays.asList( details.split( "\\s*,\\s*" ) );
+    @Named("toDtoDetails")
+    default List<String> toDtoDetails(String details) {
+        return Arrays.asList(details.split("\\s*,\\s*"));
     }
 
     /**
-     * Helper method to map "details" field from dto (which is of type List<String>) to "details" field of dto (which is of type String)
+     * Map "details" field from dto to "details" field of dto (List<String> to
+     * String with delimiter)
+     *
      * @param listDetails list of details
      * @return return a comma-separated string
      */
-    @Named( "toEntityDetails" )
-    default String toEntityDetails( List<String> listDetails ) {
-        String details = String.join( ",", listDetails );
-        return details;
+    @Named("toEntityDetails")
+    default String toEntityDetails(List<String> listDetails) {
+        return String.join(",", listDetails);
     }
 
     /**
-     * Create a dummy MenuItem object from id to prevent infinite loop in bidirectional relationship when mapping
+     * A dummy MenuItem object from id to prevent infinite loop in bidirectional
+     * relationship
+     *
      * @param id
      * @return
      */
-    @Named( "fromIdToMenu" )
-    default Menu fromId( Long id ) {
-        if ( id == null ) {
+    @Named("fromIdToMenu")
+    default Menu fromId(Long id) {
+        if (id == null) {
             return null;
         }
         Menu menuItem = new Menu();
-        menuItem.setId( id );
+        menuItem.setId(id);
         return menuItem;
     }
 }

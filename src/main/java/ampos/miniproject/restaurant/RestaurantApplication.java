@@ -11,9 +11,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan( { "ampos.miniproject.restaurant" } )
+@ComponentScan({ "ampos.miniproject.restaurant" })
 public class RestaurantApplication {
-    public static void main( String[] args ) {
-        SpringApplication.run( RestaurantApplication.class, args );
+    public static void main(String[] args) {
+        SpringApplication.run(RestaurantApplication.class, args);
     }
 }

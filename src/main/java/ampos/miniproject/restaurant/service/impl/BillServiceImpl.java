@@ -2,14 +2,15 @@ package ampos.miniproject.restaurant.service.impl;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import ampos.miniproject.restaurant.dto.BillDTO;
-import ampos.miniproject.restaurant.dto.request.BillItemRequestDTO;
 import ampos.miniproject.restaurant.dto.request.BillRequestDTO;
 import ampos.miniproject.restaurant.dto.statistic.TotalBillItemStatistictDTO;
 import ampos.miniproject.restaurant.dto.statistic.TotalBillStatisticDTO;
@@ -39,42 +40,68 @@ public class BillServiceImpl extends GenericServiceImpl<BillRequestDTO, BillDTO,
     private MenuRepository menuRepository;
 
     public BillServiceImpl(BillRepository billRepository, BillMapper billMapper, BillItemRepository billItemRepository,
-            BillItemStatisticMapper billItemReportMapper, MenuRepository menuItemRepository) {
+            BillItemStatisticMapper billItemReportMapper, MenuRepository menuRepository) {
         super(billRepository, billMapper);
         this.billItemRepository = billItemRepository;
         this.billItemReportMapper = billItemReportMapper;
-        this.menuRepository = menuItemRepository;
+        this.menuRepository = menuRepository;
     }
 
     @Override
-    void processExistingEntity(Bill bill) {
-        bill.getBillItems().clear();
-    }
+    Bill mergeExistingAndNewEntity(Bill existingBill, Bill newBill) {
+        Map<Long, BillItem> commonBillItems = newBill.getBillItems().stream().filter(item -> item.getId() != null)
+                .collect(Collectors.toMap(BillItem::getId, item -> item));
 
-    @Override
-    void processBeforeSaving(BillRequestDTO billRequestDTO, Bill bill) {
-        if (billRequestDTO.getBillItems().size() <= 0) {
-            return;
+        List<BillItem> newBillItems = newBill.getBillItems().stream().filter(item -> item.getId() == null)
+                .collect(Collectors.toList());
+
+        if (commonBillItems.size() > 0) {
+            existingBill.getBillItems().removeIf(item -> !commonBillItems.containsKey(item.getId()));
+        } else {
+            existingBill.getBillItems().clear();
         }
 
-        // Because request only contains Menu ID, need to get Menu entity from
+        existingBill.getBillItems().forEach(item -> {
+            if (commonBillItems.containsKey(item.getId())) {
+                BillItem source = commonBillItems.get(item.getId());
+                if (item.getQuantity() != source.getQuantity()) {
+                    item.setQuantity(source.getQuantity());
+                }
+
+                if (!item.getMenu().getId().equals(source.getMenu().getId())) {
+                    item.setMenu(source.getMenu());
+                    item.setOrderedTime(null);
+                }
+            }
+        });
+
+        // Add all new Bill Items to create in database
+        existingBill.getBillItems().addAll(newBillItems);
+        return existingBill;
+    }
+
+    @Override
+    public void processBeforeSaving(Bill bill) {
+        // Because request only contains MenuItem ID, need to get MenuItem entity from
         // data store to return in the response body
-        List<Long> menuIds = billRequestDTO.getBillItems().stream().map(BillItemRequestDTO::getMenuId)
-                .collect(Collectors.toList());
-        Map<Long, Menu> menus = menuRepository.findAllById(menuIds).stream()
-                .collect(Collectors.toMap(Menu::getId, menu -> menu));
+        Set<Long> menuIds = bill.getBillItems().stream().map(BillItem::getMenu).map(Menu::getId)
+                .collect(Collectors.toSet());
+        List<Menu> items = menuRepository.findMenusByIdIn(menuIds);
+        Map<Long, Menu> menus = items.stream().collect(Collectors.toMap(Menu::getId, menu -> menu));
 
         for (BillItem billItem : bill.getBillItems()) {
-            billItem.setOrderedTime(Instant.now());
-            billItem.setBill(bill);
-            billItem.setMenu(menus.get(billItem.getMenu().getId()));
+            if (billItem.getId() == null || billItem.getOrderedTime() == null) {
+                billItem.setOrderedTime(new Date());
+                billItem.setBill(bill);
+                billItem.setMenu(menus.get(billItem.getMenu().getId()));
+            }
         }
     }
 
     /**
      * Delete bill
      *
-     * @param id : of the bill to be deleted
+     * @param id
      * @throws ApplicationException
      */
     @Override
@@ -91,15 +118,15 @@ public class BillServiceImpl extends GenericServiceImpl<BillRequestDTO, BillDTO,
     @Override
     public TotalStatisticDTO getBillAndBillItemStatistic() throws ApplicationException {
         TotalBillItemStatistictDTO totalBillItemReportDTO = new TotalBillItemStatistictDTO();
-        totalBillItemReportDTO
-                .setBillItems(this.billItemReportMapper.entityToDto(billItemRepository.getAllBillReport()));
+        totalBillItemReportDTO.setBillItems(billItemReportMapper.entityToDto(billItemRepository.getAllBillStatistic()));
 
         TotalBillStatisticDTO totalBillReportDTO = new TotalBillStatisticDTO();
-        totalBillReportDTO.setBills(this.mapper.entityToDto(this.repository.findAll()));
+        totalBillReportDTO.setBills(mapper.entityToDto(repository.findAll()));
         totalBillReportDTO.setNoOfBills(totalBillReportDTO.getBills().size());
         totalBillReportDTO.setGrandTotal(
                 totalBillReportDTO.getBills().stream().map(BillDTO::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add));
 
         return new TotalStatisticDTO(totalBillItemReportDTO, totalBillReportDTO);
+
     }
 }

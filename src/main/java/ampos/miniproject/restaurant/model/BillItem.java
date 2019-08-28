@@ -2,7 +2,7 @@ package ampos.miniproject.restaurant.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -46,13 +48,14 @@ public class BillItem implements DomainEntity<Long>, Serializable {
     private Menu menu;
 
     @Column(name = "ordered_time", nullable = false)
-    private Instant orderedTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bill_id")
     private Bill bill;
 
-    public BillItem(long id, int quantity, Menu menuItem, Instant orderedTime) {
+    public BillItem(long id, int quantity, Menu menuItem, Date orderedTime) {
         super();
         this.id = id;
         this.quantity = quantity;
@@ -67,6 +70,4 @@ public class BillItem implements DomainEntity<Long>, Serializable {
     public BigDecimal getSubTotal() {
         return BigDecimal.valueOf(quantity).multiply(menu.getPrice());
     }
-
-	
 }

@@ -1,6 +1,7 @@
 package ampos.miniproject.restaurant.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             + " OR (LOWER(menu.details) LIKE CONCAT('%',:keyword,'%'))")
     // @formatter:on
     Page<Menu> search(@Param("keyword") String keyword, Pageable pageable);
+
+    List<Menu> findMenusByIdIn(Collection<Long> ids);
 
     @Modifying
     @Query("DELETE FROM Menu WHERE id in :ids")

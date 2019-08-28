@@ -33,7 +33,8 @@ public class MenuDTO implements Serializable {
 
     private List<String> details;
 
-    public MenuDTO( Long id, @NotNull String name, @NotNull String description, String imageUrl, @NotNull BigDecimal price, List<String> details ) {
+    public MenuDTO(Long id, @NotNull String name, @NotNull String description, String imageUrl,
+            @NotNull BigDecimal price, List<String> details) {
         super();
         this.id = id;
         this.name = name;

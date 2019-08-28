@@ -6,11 +6,11 @@ import ampos.miniproject.restaurant.dto.MenuDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Bill item statistic DTO
+ */
 @Getter
 @Setter
-/**
- * Bill item report DTO
- */
 public class BillItemStatisticDTO {
     private MenuDTO menu;
     private long quantity;

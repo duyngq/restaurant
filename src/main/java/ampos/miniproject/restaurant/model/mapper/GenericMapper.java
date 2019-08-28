@@ -3,22 +3,18 @@ package ampos.miniproject.restaurant.model.mapper;
 import java.util.List;
 
 /**
- * Contract for a generic dto to entity mapper.
- * 
- * @param <DTO>
- *            - DTO type parameter.
- * @param <ENTITY>
- *            - Entity type parameter.
+ * Generic mapper to help convert request, entity and dto
+ *
  */
-
 public interface GenericMapper<DTO, ENTITY, REQUEST> {
 
     /**
      * Map dto type to entity type
+     *
      * @param request
      * @return entity
      */
-    public ENTITY requestToEntity( REQUEST request );
+    public ENTITY requestToEntity(REQUEST request);
 
     /**
      * Map entity type to dto type
@@ -26,7 +22,7 @@ public interface GenericMapper<DTO, ENTITY, REQUEST> {
      * @param entity
      * @return dto
      */
-    public DTO entityToDto( ENTITY entity );
+    public DTO entityToDto(ENTITY entity);
 
     /**
      * Map list of dto type to list of entity type
@@ -34,7 +30,7 @@ public interface GenericMapper<DTO, ENTITY, REQUEST> {
      * @param requestList
      * @return entityList
      */
-    public List<ENTITY> requestToEntity( List<REQUEST> requestList );
+    public List<ENTITY> requestToEntity(List<REQUEST> requestList);
 
     /**
      * Map list of entity type to list of dto type
@@ -42,5 +38,5 @@ public interface GenericMapper<DTO, ENTITY, REQUEST> {
      * @param entityList
      * @return dtoList
      */
-    public List<DTO> entityToDto( List<ENTITY> entityList );
+    public List<DTO> entityToDto(List<ENTITY> entityList);
 }

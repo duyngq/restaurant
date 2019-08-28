@@ -10,7 +10,7 @@ import ampos.miniproject.restaurant.exception.ApplicationException;
  *
  */
 public interface BillService extends GenericService<BillRequestDTO, BillDTO, Long> {
-     /**
+    /**
      * Get bill and bill item report
      *
      * @return

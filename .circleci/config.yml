@@ -11,10 +11,7 @@ jobs:
       - run: mvn install -Dmaven.test.skip=true
       
   test:
-    docker:
-      - image: circleci/openjdk:stretch
     steps:
-      - checkout
       - run: mvn test
       
 workflows:

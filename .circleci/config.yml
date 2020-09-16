@@ -8,12 +8,24 @@ jobs:
       - checkout
       - run: echo "Start building restaurant repo"
       - run: ls
+      - run: mkdir -p my_workspace
+      - run: echo "Trying out workspaces" > my_workspace/echo-output
       - run: mvn install -Dmaven.test.skip=true
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory
+          root: my_workspace
+          # Must be relative path from root
+          paths:
+            - echo-output   
       
   test:
     docker:
       - image: circleci/openjdk:stretch
     steps:
+      - run: echo "A more familiar hi"  
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: my_workspace
       - run: mvn clean install test
       
 workflows:

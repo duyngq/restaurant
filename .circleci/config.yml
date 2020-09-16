@@ -6,14 +6,15 @@ jobs:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: ./mvnw install -Dmaven.test.skip=true
+      - run: ls
+      - run: mvn install -Dmaven.test.skip=true
       
   test:
     docker:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: ./mvnw test
+      - run: mvn test
       
 workflows:
   version: 2

@@ -26,6 +26,7 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: my_workspace
+      - run: ls -l
       - run: mvn clean install test
       
 workflows:

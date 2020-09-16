@@ -6,6 +6,7 @@ jobs:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
+      - run: echo "Start building restaurant repo"
       - run: ls
       - run: mvn install -Dmaven.test.skip=true
       
